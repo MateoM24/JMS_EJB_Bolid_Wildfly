@@ -1,5 +1,8 @@
 package pakiet;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
@@ -14,6 +17,7 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.MessageProducer;
+import javax.jms.ObjectMessage;
 import javax.jms.Session;
 import javax.jms.TextMessage;
 import javax.jms.Topic;
@@ -51,9 +55,21 @@ public class BeanBolid implements MessageListener {
 			connection = connectionFactory.createConnection();
 			Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 	         MessageProducer messageProducer = session.createProducer(topic);
-	         TextMessage message=session.createTextMessage();
-	         message.setText("WIADOMOŒÆ!");
+	         //TextMessage message=session.createTextMessage();//createObjectMessage
+	         DTOState state=new DTOState();
+	         state.setEngineTemp(Math.random()*100);
+	         state.setOilPressure(Math.random()*100);
+	         state.setTyresPressure(Math.random()*10);
+	         state.setTime(LocalDateTime.now());
+	         ObjectMessage message=session.createObjectMessage(state);
 	         messageProducer.send(message);
+	         //objMsg.setObject(obiektmój);
+	         //StringBuilder stringBuilder=new StringBuilder();
+	         //stringBuilder.append("wiadomoœæ wys³ana: ");
+	         //LocalTime time=LocalTime.now();
+	         //stringBuilder.append(time);
+	         //message.setText(stringBuilder.toString());
+	         //messageProducer.send(message);//send(objmsg);
 		} catch (JMSException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
