@@ -4,9 +4,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
-import javax.ejb.MessageDrivenContext;
 import javax.ejb.Schedule;
-import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -16,7 +14,6 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.MessageProducer;
-import javax.jms.Queue;
 import javax.jms.Session;
 import javax.jms.TextMessage;
 import javax.jms.Topic;
@@ -24,14 +21,13 @@ import javax.jms.Topic;
 /**
  * Message-Driven Bean implementation class for: BeenBolid
  */
-/*@MessageDriven(
+@MessageDriven(
 		activationConfig = { @ActivationConfigProperty(
 				propertyName = "destination", propertyValue = "jms.topic.sriTopic"), @ActivationConfigProperty(
 				propertyName = "destinationType", propertyValue = "javax.jms.Topic")
 		}, 
-		mappedName = "jms.topic.sriTopic")*/
+		mappedName = "jms.topic.sriTopic")
 @Startup//M
-@Singleton//M
 public class BeanBolid implements MessageListener {
 	
 	@Resource(mappedName = "java:/ConnectionFactory")
