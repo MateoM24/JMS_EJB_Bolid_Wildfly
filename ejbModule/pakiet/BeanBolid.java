@@ -2,6 +2,7 @@ package pakiet;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Random;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -46,8 +47,8 @@ public class BeanBolid implements MessageListener {
     public BeanBolid() {
         // TODO Auto-generated constructor stub
     }
-    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)//M
-	@Schedule(minute="*/1",hour="*")//M minute="*/10"
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+	@Schedule(minute="*/1",hour="*")
 	@PostConstruct//M
     public void sendMessage(){
     	 Connection connection=null;
@@ -57,12 +58,14 @@ public class BeanBolid implements MessageListener {
 	         MessageProducer messageProducer = session.createProducer(topic);
 	         //TextMessage message=session.createTextMessage();//createObjectMessage
 	         DTOState state=new DTOState();
-	         state.setEngineTemp(Math.random()*100);
-	         state.setOilPressure(Math.random()*100);
-	         state.setTyresPressure(Math.random()*10);
+	         Random randomGenerator = new Random();
+	         state.setEngineTemp(randomGenerator.nextInt(50)+50);//(Math.random()*100);
+	         state.setOilPressure(randomGenerator.nextInt(10));//(Math.random()*100);
+	         state.setTyresPressure(randomGenerator.nextInt(10));//(Math.random()*10);
 	         state.setTime(LocalDateTime.now());
 	         ObjectMessage message=session.createObjectMessage(state);
 	         messageProducer.send(message);
+	         System.out.println("BOLID: wys³¹no now¹ wiadomoœæ");
 	         //objMsg.setObject(obiektmój);
 	         //StringBuilder stringBuilder=new StringBuilder();
 	         //stringBuilder.append("wiadomoœæ wys³ana: ");
