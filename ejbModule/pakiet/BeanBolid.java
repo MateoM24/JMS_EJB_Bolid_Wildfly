@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
 import javax.ejb.Schedule;
+import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -26,13 +27,14 @@ import javax.jms.Topic;
 /**
  * Message-Driven Bean implementation class for: BeenBolid
  */
-@MessageDriven(
+/*@MessageDriven(
 		activationConfig = { @ActivationConfigProperty(
 				propertyName = "destination", propertyValue = "jms.topic.sriTopic"), @ActivationConfigProperty(
 				propertyName = "destinationType", propertyValue = "javax.jms.Topic")
 		}, 
-		mappedName = "jms.topic.sriTopic")
+		mappedName = "jms.topic.sriTopic")*/
 @Startup//M
+@Singleton
 public class BeanBolid implements MessageListener {
 	
 	@Resource(mappedName = "java:/ConnectionFactory")
