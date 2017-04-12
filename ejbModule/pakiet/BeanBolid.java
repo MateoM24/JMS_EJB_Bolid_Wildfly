@@ -65,6 +65,8 @@ public class BeanBolid implements MessageListener {
 	         state.setOilPressure(randomGenerator.nextInt(10));//(Math.random()*100);
 	         state.setTyresPressure(randomGenerator.nextInt(10));//(Math.random()*10);
 	         state.setTime(LocalDateTime.now());
+	         state.setDriverAlert(false);
+	         state.setMechanicAlert(false);
 	         ObjectMessage message=session.createObjectMessage(state);
 	         messageProducer.send(message);
 	         System.out.println("BOLID: wys³¹no now¹ wiadomoœæ");
