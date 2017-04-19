@@ -24,18 +24,9 @@ import javax.jms.Session;
 import javax.jms.TextMessage;
 import javax.jms.Topic;
 
-/**
- * Message-Driven Bean implementation class for: BeenBolid
- */
-/*@MessageDriven(
-		activationConfig = { @ActivationConfigProperty(
-				propertyName = "destination", propertyValue = "jms.topic.sriTopic"), @ActivationConfigProperty(
-				propertyName = "destinationType", propertyValue = "javax.jms.Topic")
-		}, 
-		mappedName = "jms.topic.sriTopic")*/
-@Startup//M
+@Startup
 @Singleton
-public class BeanBolid implements MessageListener {
+public class BeanBolid{
 	
 	@Resource(mappedName = "java:/ConnectionFactory")
     private ConnectionFactory connectionFactory;
@@ -43,14 +34,10 @@ public class BeanBolid implements MessageListener {
 	@Resource(lookup =  "java:/jms.topic.sriTopic")
     private Topic topic;
     
-    //@Resource
-    //private MessageDrivenContext mdc;
+    public BeanBolid() {}
     
-    public BeanBolid() {
-        // TODO Auto-generated constructor stub
-    }
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-	@Schedule(minute="*/1",hour="*")
+	@Schedule(second="*/15",minute="*",hour="*")
 	@PostConstruct//M
     public void sendMessage(){
     	 Connection connection=null;
@@ -58,45 +45,26 @@ public class BeanBolid implements MessageListener {
 			connection = connectionFactory.createConnection();
 			Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 	         MessageProducer messageProducer = session.createProducer(topic);
-	         //TextMessage message=session.createTextMessage();//createObjectMessage
 	         DTOState state=new DTOState();
 	         Random randomGenerator = new Random();
-	         state.setEngineTemp(randomGenerator.nextInt(50)+50);//(Math.random()*100);
-	         state.setOilPressure(randomGenerator.nextInt(10));//(Math.random()*100);
-	         state.setTyresPressure(randomGenerator.nextInt(10));//(Math.random()*10);
+	         state.setEngineTemp(randomGenerator.nextInt(50)+50);
+	         state.setOilPressure(randomGenerator.nextInt(10));
+	         state.setTyresPressure(randomGenerator.nextInt(10));
 	         state.setTime(LocalDateTime.now());
 	         state.setDriverAlert(false);
 	         state.setMechanicAlert(false);
 	         ObjectMessage message=session.createObjectMessage(state);
 	         messageProducer.send(message);
 	         System.out.println("BOLID: wys³¹no now¹ wiadomoœæ");
-	         //objMsg.setObject(obiektmój);
-	         //StringBuilder stringBuilder=new StringBuilder();
-	         //stringBuilder.append("wiadomoœæ wys³ana: ");
-	         //LocalTime time=LocalTime.now();
-	         //stringBuilder.append(time);
-	         //message.setText(stringBuilder.toString());
-	         //messageProducer.send(message);//send(objmsg);
 		} catch (JMSException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally{
 			if(connection!=null)
 				try {
 					connection.close();
 				} catch (JMSException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 		}
     }
-	
-	/**
-     * @see MessageListener#onMessage(Message)
-     */
-    public void onMessage(Message message) {
-        // TODO Auto-generated method stub
-        
-    }
-
 }
